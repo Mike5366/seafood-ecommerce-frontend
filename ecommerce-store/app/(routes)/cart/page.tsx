@@ -38,7 +38,6 @@ const CartPage = () => {
           </div>
         </div>
       </Container>
-      Cart Page
     </div>
   );
 };
