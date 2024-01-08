@@ -35,13 +35,6 @@ const Info: React.FC<InfoProps> = ({ data }) => {
           <div>{data?.size?.name}</div>
         </div>
         <div className="flex items-center gap-x-4">
-          <h3 className="font-semibold text-black">Color:</h3>
-          <div
-            className="h-5 w-5 rounded-full border border-gray-600"
-            style={{ backgroundColor: data?.color?.value }}
-          ></div>
-        </div>
-        <div className="flex items-center gap-x-4">
           <div className="flex items-center gap-x-4">
             <h3 className="font-semibold text-black">Quantity:</h3>
             <Input
