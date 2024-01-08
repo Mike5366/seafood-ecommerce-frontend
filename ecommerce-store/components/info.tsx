@@ -1,10 +1,12 @@
-"use client"
+"use client";
 
 import { Product } from "@/types";
 import Currency from "@/components/ui/currency";
 import Button from "./ui/button";
 import { ShoppingCart } from "lucide-react";
 import useCart from "@/hooks/use-cart";
+import { Input } from "./ui/input";
+import { useState } from "react";
 
 interface InfoProps {
   data: Product;
@@ -12,10 +14,11 @@ interface InfoProps {
 
 const Info: React.FC<InfoProps> = ({ data }) => {
   const cart = useCart();
+  const [quantity, setQuantity] = useState(1);
 
   const onAddToCart = () => {
-    cart.addItem(data);
-  }
+    cart.addItem(data, quantity);
+  };
 
   return (
     <div>
@@ -37,6 +40,19 @@ const Info: React.FC<InfoProps> = ({ data }) => {
             className="h-5 w-5 rounded-full border border-gray-600"
             style={{ backgroundColor: data?.color?.value }}
           ></div>
+        </div>
+        <div className="flex items-center gap-x-4">
+          <div className="flex items-center gap-x-4">
+            <h3 className="font-semibold text-black">Quantity:</h3>
+            <Input
+              type="number"
+              value={quantity}
+              min="1"
+              onChange={(e) => {
+                setQuantity(parseInt(e.target.value));
+              }}
+            />
+          </div>
         </div>
       </div>
       <div className="mt-10 flex items-center gap-x-3">

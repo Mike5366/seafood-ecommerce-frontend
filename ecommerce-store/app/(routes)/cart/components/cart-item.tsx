@@ -7,17 +7,26 @@ import { X } from "lucide-react";
 import IconButton from "@/components/ui/icon-button";
 import Currency from "@/components/ui/currency";
 import useCart from "@/hooks/use-cart";
-import { Product } from "@/types";
+import { OrderItem } from "@/types";
+import { Input } from "@/components/ui/input";
+import { ChangeEvent, useState } from "react";
 
 interface CartItemProps {
-  data: Product;
+  data: OrderItem;
 }
 
 const CartItem: React.FC<CartItemProps> = ({ data }) => {
   const cart = useCart();
+  const [quantity, setQuantity] = useState(data.quantity);
+
+  const onSetQuantity = (e: ChangeEvent<HTMLInputElement>, data: OrderItem) => {
+    e.stopPropagation();
+    setQuantity(parseInt(e.target.value));
+    cart.setItemQuantity(data.product, parseInt(e.target.value));
+  };
 
   const onRemove = () => {
-    cart.removeItem(data.id);
+    cart.removeItem(data.product.id);
   };
 
   return (
@@ -25,7 +34,7 @@ const CartItem: React.FC<CartItemProps> = ({ data }) => {
       <div className="relative h-24 w-24 rounded-md overflow-hidden sm:h-48 sm:w-48">
         <Image
           fill
-          src={data.images[0].url}
+          src={data.product.images[0].url}
           alt=""
           className="object-cover object-center"
         />
@@ -36,16 +45,25 @@ const CartItem: React.FC<CartItemProps> = ({ data }) => {
         </div>
         <div className="relative pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-0">
           <div className="flex justify-between">
-            <p className="text-lg font-semibold text-black">{data.name}</p>
+            <p className="text-lg font-semibold text-black">{data.product.name}</p>
           </div>
           <div className="mt-1 flex text-sm">
-            <p className="text-gray-500">{data.color.name}</p>
+            <p className="text-gray-500">{data.product.color.name}</p>
             <p className="text-gray-500 ml-4 border-l border-gray-200 pl-4">
-              {data.size.name}
+              {data.product.size.name}
             </p>
           </div>
-          <Currency value={data.price} />
+          <Currency value={data.product.price} />
         </div>
+        <div className="flex items-center gap-x-4">
+            <h3 className="font-semibold text-black">Quantity:</h3>
+            <Input
+              type="number"
+              value={quantity}
+              min="1"
+              onChange={(e) => {onSetQuantity(e, data)}}
+            />
+          </div>
       </div>
     </li>
   );
