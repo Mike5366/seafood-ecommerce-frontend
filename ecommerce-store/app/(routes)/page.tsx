@@ -4,18 +4,18 @@ import Billboard from "@/components/billboard";
 import ProductList from "@/components/product-list";
 import Container from "@/components/ui/container";
 
-// export const revalidate = 0;
 
 const HomePage = async () => {
   const products = await getProducts({ isFeatured: true });
-  const billboard = await getBillboard("34347a5a-2582-428f-99f5-1eba140eb432");
+  const billboard = await getBillboard("1dbdedf9-e5f2-4a68-b010-80e1d8cbccd4");
+
   return (
     <div>
       <Container>
         <div className="space-y-10 pb-10">
-          <Billboard data={billboard} />
+          {billboard && <Billboard data={billboard} />}
           <div className="flex flex-col gap-y-8 px-4 sm:px-6 lg:px-8">
-            <ProductList title="Featured Products" items={products} />
+            {products.length !== 0 && <ProductList title="Featured Products" items={products} />}
           </div>
         </div>
       </Container>

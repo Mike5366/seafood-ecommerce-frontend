@@ -10,9 +10,10 @@ import { useState } from "react";
 
 interface InfoProps {
   data: Product;
+  showDescription: boolean;
 }
 
-const Info: React.FC<InfoProps> = ({ data }) => {
+const Info: React.FC<InfoProps> = ({ data, showDescription }) => {
   const cart = useCart();
   const [quantity, setQuantity] = useState(1);
 
@@ -34,6 +35,12 @@ const Info: React.FC<InfoProps> = ({ data }) => {
           <h3 className="font-semibold text-black">Size:</h3>
           <div>{data?.size?.name}</div>
         </div>
+        {showDescription && (
+          <div className="flex items-center gap-x-4">
+            <h3 className="font-semibold text-black">Description:</h3>
+            <div>{data?.description}</div>
+          </div>
+        )}
         <div className="flex items-center gap-x-4">
           <div className="flex items-center gap-x-4">
             <h3 className="font-semibold text-black">Quantity:</h3>
