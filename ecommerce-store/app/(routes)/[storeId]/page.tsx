@@ -4,18 +4,25 @@ import Billboard from "@/components/billboard";
 import ProductList from "@/components/product-list";
 import Container from "@/components/ui/container";
 
+interface HomePageProps {
+  params: {
+    storeId: string;
+  };
+}
 
-const HomePage = async () => {
-  const products = await getProducts({ isFeatured: true });
-  const billboard = await getBillboard("1dbdedf9-e5f2-4a68-b010-80e1d8cbccd4");
+const HomePage: React.FC<HomePageProps> = async ({
+  params,
+}) => {
+  const products = await getProducts(params.storeId, { isFeatured: true });
+  // const billboard = await getBillboard("1dbdedf9-e5f2-4a68-b010-80e1d8cbccd4");
 
   return (
     <div>
       <Container>
         <div className="space-y-10 pb-10">
-          {billboard && <Billboard data={billboard} />}
+          {/* {billboard && <Billboard data={billboard} />} */}
           <div className="flex flex-col gap-y-8 px-4 sm:px-6 lg:px-8">
-            {products.length !== 0 && <ProductList title="Featured Products" items={products} />}
+            {products.length !== 0 && <ProductList title="Featured Products" storeId={params.storeId} items={products} />}
           </div>
         </div>
       </Container>

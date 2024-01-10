@@ -6,13 +6,32 @@ import { useEffect, useState } from "react";
 import CartItem from "./components/cart-item";
 import Summary from "./components/summary";
 
-const CartPage = () => {
+interface CartPageProps {
+  params: {
+    storeId: string;
+  };
+}
+
+const CartPage: React.FC<CartPageProps> = ({ params }) => {
   const cart = useCart();
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (useCart.persist.getOptions().name !== "cart-storage-" + params.storeId) {
+      const storageName = useCart.persist.getOptions().name || "";
+      localStorage.removeItem(storageName);
+
+      useCart.persist.setOptions({
+        name: "cart-storage-" + params.storeId,
+      });
+
+      useCart.persist.rehydrate();
+    }
+  }, [params.storeId]);
 
   if (!isMounted) {
     return null;
@@ -30,11 +49,15 @@ const CartPage = () => {
               )}
               <ul>
                 {cart.orderItems.map((orderItem) => (
-                  <CartItem key={orderItem.product.id} data={orderItem} />
+                  <CartItem
+                    key={orderItem.product.id}
+                    storeId={params.storeId}
+                    data={orderItem}
+                  />
                 ))}
               </ul>
             </div>
-            <Summary />
+            <Summary storeId={params.storeId} />
           </div>
         </div>
       </Container>

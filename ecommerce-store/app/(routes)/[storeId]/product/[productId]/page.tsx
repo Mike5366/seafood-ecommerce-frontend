@@ -7,13 +7,14 @@ import Container from "@/components/ui/container";
 
 interface ProductPageProps {
   params: {
+    storeId: string;
     productId: string;
   };
 }
 
 const ProductPage: React.FC<ProductPageProps> = async ({ params }) => {
-  const product = await getProduct(params.productId);
-  const suggestedProducts = await getProducts({
+  const product = await getProduct(params.storeId, params.productId);
+  const suggestedProducts = await getProducts(params.storeId, {
     categoryId: product?.category?.id,
   });
   return (
@@ -25,11 +26,11 @@ const ProductPage: React.FC<ProductPageProps> = async ({ params }) => {
             <Gallery images={product.images} />
             <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
               {/* Info */}
-              <Info data={product} showDescription={true}/>
+              <Info storeId={params.storeId} data={product} showDescription={true}/>
             </div>
           </div>
           <hr className="my-10" />
-          <ProductList title="Related Products" items={suggestedProducts} />
+          <ProductList title="Related Products" storeId={params.storeId} items={suggestedProducts} />
         </div>
       </Container>
     </div>

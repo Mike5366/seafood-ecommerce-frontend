@@ -10,6 +10,7 @@ import MobileFilters from "./components/mobile-filters";
 
 interface CategoryPageProps {
   params: {
+    storeId: string;
     categoryId: string;
   };
   searchParams: {
@@ -21,12 +22,12 @@ const CategoryPage: React.FC<CategoryPageProps> = async ({
   params,
   searchParams,
 }) => {
-  const product = await getProducts({
+  const product = await getProducts(params.storeId, {
     categoryId: params.categoryId,
     sizeId: searchParams.sizeId,
   });
-  const sizes = await getSizes();
-  const category = await getCategory(params.categoryId);
+  const sizes = await getSizes(params.storeId);
+  const category = await getCategory(params.storeId, params.categoryId);
 
   return (
     <div className="bg-white">
@@ -34,7 +35,7 @@ const CategoryPage: React.FC<CategoryPageProps> = async ({
         <Billboard data={category.billboard} />
         <div className="px-4 sm:px-6 lg:px-8 pb-24">
           <div className="lg:grid lg:grid-cols-5 lg:gap-x-8">
-            <MobileFilters sizes={sizes}/>
+            <MobileFilters sizes={sizes} />
             <div className="hidden lg:block">
               <Filter valueKey="sizeId" name="Sizes" data={sizes} />
             </div>
@@ -42,7 +43,7 @@ const CategoryPage: React.FC<CategoryPageProps> = async ({
               {product.length === 0 && <NoResults />}
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 {product.map((item) => (
-                    <ProductCard key={item.id} data={(item)}/>
+                  <ProductCard key={item.id} storeId={params.storeId} data={item} />
                 ))}
               </div>
             </div>

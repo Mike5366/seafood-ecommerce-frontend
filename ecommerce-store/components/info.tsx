@@ -6,16 +6,30 @@ import Button from "./ui/button";
 import { ShoppingCart } from "lucide-react";
 import useCart from "@/hooks/use-cart";
 import { Input } from "./ui/input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface InfoProps {
+  storeId: string;
   data: Product;
   showDescription: boolean;
 }
 
-const Info: React.FC<InfoProps> = ({ data, showDescription }) => {
+const Info: React.FC<InfoProps> = ({storeId, data, showDescription }) => {
   const cart = useCart();
   const [quantity, setQuantity] = useState(1);
+
+  useEffect(() => {
+    if (useCart.persist.getOptions().name !== "cart-storage-" + storeId) {
+      const storageName = useCart.persist.getOptions().name || "";
+      localStorage.removeItem(storageName);
+
+      useCart.persist.setOptions({
+        name: "cart-storage-" + storeId,
+      });
+
+      useCart.persist.rehydrate();
+    }
+  }, [storeId]);
 
   const onAddToCart = () => {
     cart.addItem(data, quantity);

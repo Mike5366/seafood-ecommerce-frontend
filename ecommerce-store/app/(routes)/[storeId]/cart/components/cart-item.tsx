@@ -9,15 +9,29 @@ import Currency from "@/components/ui/currency";
 import useCart from "@/hooks/use-cart";
 import { OrderItem } from "@/types";
 import { Input } from "@/components/ui/input";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 
 interface CartItemProps {
+  storeId: string;
   data: OrderItem;
 }
 
-const CartItem: React.FC<CartItemProps> = ({ data }) => {
+const CartItem: React.FC<CartItemProps> = ({ storeId, data }) => {
   const cart = useCart();
   const [quantity, setQuantity] = useState(data.quantity);
+
+  useEffect(() => {
+    if (useCart.persist.getOptions().name !== "cart-storage-" + storeId) {
+      const storageName = useCart.persist.getOptions().name || "";
+      localStorage.removeItem(storageName);
+
+      useCart.persist.setOptions({
+        name: "cart-storage-" + storeId,
+      });
+
+      useCart.persist.rehydrate();
+    }
+  }, [storeId]);
 
   const onSetQuantity = (e: ChangeEvent<HTMLInputElement>, data: OrderItem) => {
     e.stopPropagation();
@@ -45,7 +59,9 @@ const CartItem: React.FC<CartItemProps> = ({ data }) => {
         </div>
         <div className="relative pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-0">
           <div className="flex justify-between">
-            <p className="text-lg font-semibold text-black">{data.product.name}</p>
+            <p className="text-lg font-semibold text-black">
+              {data.product.name}
+            </p>
           </div>
           <div className="mt-1 flex text-sm">
             <p className="text-gray-500 ml-4 border-l border-gray-200 pl-4">
@@ -55,14 +71,16 @@ const CartItem: React.FC<CartItemProps> = ({ data }) => {
           <Currency value={data.product.price} />
         </div>
         <div className="flex items-center gap-x-4">
-            <h3 className="font-semibold text-black">Quantity:</h3>
-            <Input
-              type="number"
-              value={quantity}
-              min="1"
-              onChange={(e) => {onSetQuantity(e, data)}}
-            />
-          </div>
+          <h3 className="font-semibold text-black">Quantity:</h3>
+          <Input
+            type="number"
+            value={quantity}
+            min="1"
+            onChange={(e) => {
+              onSetQuantity(e, data);
+            }}
+          />
+        </div>
       </div>
     </li>
   );

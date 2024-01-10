@@ -6,35 +6,49 @@ import IconButton from "@/components/ui/icon-button";
 import { Expand, ShoppingCart } from "lucide-react";
 import Currency from "@/components/ui/currency";
 import { useRouter } from "next/navigation";
-import { MouseEventHandler } from "react";
+import { MouseEventHandler, useEffect } from "react";
 import PreviewModal from "../preview-modal";
 import usePreviewModal from "@/hooks/use-preview-modal";
 import useCart from "@/hooks/use-cart";
 
 interface ProductCardProps {
+  storeId: string;
   data: Product;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ data }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ storeId, data }) => {
   const router = useRouter();
   const previewModal = usePreviewModal();
   const cart = useCart();
 
+  useEffect(() => {
+    if (useCart.persist.getOptions().name !== "cart-storage-" + storeId) {
+      const storageName = useCart.persist.getOptions().name || "";
+      localStorage.removeItem(storageName);
+
+      useCart.persist.setOptions({
+        name: "cart-storage-" + storeId,
+      });
+
+      useCart.persist.rehydrate();
+    }
+  }, [storeId]);
+
   const handleClick = () => {
-    router.push(`/product/${data?.id}`);
+    router.push(`/${storeId}/product/${data?.id}`);
   };
 
   const onPreview: MouseEventHandler<HTMLButtonElement> = (event) => {
     event.stopPropagation();
 
     previewModal.onOpen(data);
-  }
+  };
 
   const onAddToCart: MouseEventHandler<HTMLButtonElement> = (event) => {
     event.stopPropagation();
 
     cart.addItem(data, 1);
-  }
+  };
 
   return (
     <div

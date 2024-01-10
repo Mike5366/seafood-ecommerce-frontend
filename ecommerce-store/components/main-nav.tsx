@@ -6,16 +6,18 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 interface MainNavProps {
+  storeId: string;
   data: Category[];
 }
 
-const MainNav: React.FC<MainNavProps> = ({ data }) => {
+const MainNav: React.FC<MainNavProps> = ({ storeId, data }) => {
   const pathname = usePathname();
+  console.log()
 
   const routes = data.map((route) => ({
-    href: `/category/${route.id}`,
+    href: `/${storeId}/category/${route.id}`,
     label: route.name,
-    active: pathname === `/category/${route.id}`,
+    active: pathname === `/${storeId}/category/${route.id}`,
   }));
   return (
     <nav className="mx-6 flex items-center space-x-4 lg:space-x-6">

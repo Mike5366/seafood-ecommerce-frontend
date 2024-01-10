@@ -9,10 +9,27 @@ import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
 
-const Summary = () => {
+interface SummaryProps {
+  storeId: string;
+}
+
+const Summary:React.FC<SummaryProps> = ({storeId}) => {
   const searchParams = useSearchParams();
   const items = useCart((state) => state.orderItems);
   const removeAll = useCart((state) => state.removeAll);
+
+  useEffect(() => {
+    if (useCart.persist.getOptions().name !== "cart-storage-" + storeId) {
+      const storageName = useCart.persist.getOptions().name || "";
+      localStorage.removeItem(storageName);
+
+      useCart.persist.setOptions({
+        name: "cart-storage-" + storeId,
+      });
+
+      useCart.persist.rehydrate();
+    }
+  }, [storeId]);
 
   useEffect(() => {
     if (searchParams.get("success")) {
@@ -33,7 +50,7 @@ const Summary = () => {
 
   const onCheckout = async () => {
     const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/checkout`,
+      `${process.env.NEXT_PUBLIC_API_URL}/${storeId}/checkout`,
       { items }
     );
 
