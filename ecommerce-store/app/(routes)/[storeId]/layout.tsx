@@ -1,5 +1,7 @@
 import Footer from "@/components/footer";
 import Navbar from "@/components/navbar";
+import ModaleProvider from "@/providers/modal-provider";
+import ToastProvider from "@/providers/toast-provider";
 
 export default function StoreLayout({
   children,
@@ -12,7 +14,9 @@ export default function StoreLayout({
 }) {
   return (
     <>
-      <Navbar storeId={params.storeId}/>
+      <ModaleProvider storeId={params.storeId}/>
+      <ToastProvider />
+      <Navbar storeId={params.storeId} />
       {children}
       <Footer />
     </>

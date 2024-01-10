@@ -5,7 +5,11 @@ import Modal from "./ui/modal";
 import Gallery from "./gallery";
 import Info from "./info";
 
-const PreviewModal = () => {
+interface PreviewModalProps {
+  storeId: string;
+}
+
+const PreviewModal:React.FC<PreviewModalProps> = ({storeId}) => {
   const previewModal = usePreviewModal();
   const product = usePreviewModal((state) => state.data);
 
@@ -20,7 +24,7 @@ const PreviewModal = () => {
           <Gallery images={product.images} />
         </div>
         <div className="sm:col-span-8 lg:col-span-7">
-          <Info data={product} showDescription={false}/>
+          <Info storeId={storeId} data={product} showDescription={false}/>
         </div>
       </div>
     </Modal>

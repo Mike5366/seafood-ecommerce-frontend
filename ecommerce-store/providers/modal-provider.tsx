@@ -3,7 +3,11 @@
 import PreviewModal from "@/components/preview-modal";
 import { useEffect, useState } from "react";
 
-const ModaleProvider = () => {
+interface ModaleProviderProps {
+  storeId: string;
+}
+
+const ModaleProvider:React.FC<ModaleProviderProps> = ({storeId}) => {
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -16,7 +20,7 @@ const ModaleProvider = () => {
 
   return (
     <>
-      <PreviewModal />
+      <PreviewModal storeId={storeId}/>
     </>
   );
 };
