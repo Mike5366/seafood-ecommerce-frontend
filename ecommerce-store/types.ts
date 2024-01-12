@@ -1,3 +1,9 @@
+export interface Store {
+  id: string;
+  name: string;
+  billboardId: string;
+}
+
 export interface Billboard {
   id: string;
   label: string;
