@@ -50,9 +50,9 @@ const Info: React.FC<InfoProps> = ({storeId, data, showDescription }) => {
           <div>{data?.size?.name}</div>
         </div>
         {showDescription && (
-          <div className="flex items-center gap-x-4">
+          <div className="flex items-start gap-x-4">
             <h3 className="font-semibold text-black">Description:</h3>
-            <div>{data?.description}</div>
+            <div>{data?.description.split("\n").map((line) => { return <div key={line}> {line} <br/> </div>})}</div>
           </div>
         )}
         <div className="flex items-center gap-x-4">
