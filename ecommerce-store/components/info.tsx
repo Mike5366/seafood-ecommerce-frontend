@@ -14,7 +14,7 @@ interface InfoProps {
   showDescription: boolean;
 }
 
-const Info: React.FC<InfoProps> = ({storeId, data, showDescription }) => {
+const Info: React.FC<InfoProps> = ({ storeId, data, showDescription }) => {
   const cart = useCart();
   const [quantity, setQuantity] = useState(1);
 
@@ -49,12 +49,6 @@ const Info: React.FC<InfoProps> = ({storeId, data, showDescription }) => {
           <h3 className="font-semibold text-black">Size:</h3>
           <div>{data?.size?.name}</div>
         </div>
-        {showDescription && (
-          <div className="flex items-start gap-x-4">
-            <h3 className="font-semibold text-black">Description:</h3>
-            <div>{data?.description.split("\n").map((line) => { return <div key={line}> {line} <br/> </div>})}</div>
-          </div>
-        )}
         <div className="flex items-center gap-x-4">
           <div className="flex items-center gap-x-4">
             <h3 className="font-semibold text-black">Quantity:</h3>
@@ -74,6 +68,26 @@ const Info: React.FC<InfoProps> = ({storeId, data, showDescription }) => {
           Add To Cart
           <ShoppingCart />
         </Button>
+      </div>
+      <hr className="my-6" />
+      <div className="flex flex-col gap-y-6">
+        <div className="flex items-center gap-x-4">
+          {showDescription && (
+            <div className="flex items-start gap-x-4">
+              <h3 className="font-semibold text-black">Description:</h3>
+              <div>
+                {data?.description.split("\n").map((line) => {
+                  return (
+                    <div key={line}>
+                      {" "}
+                      {line} <br />{" "}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

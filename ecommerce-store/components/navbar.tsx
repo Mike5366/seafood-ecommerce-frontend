@@ -6,7 +6,7 @@ import NavbarActions from "@/components/navbar-actions";
 import getSetting from "@/actions/get-setting";
 
 interface NavbarProps {
-    storeId: string;
+  storeId: string;
 }
 
 const Navbar: React.FC<NavbarProps> = async ({ storeId }) => {
@@ -19,8 +19,10 @@ const Navbar: React.FC<NavbarProps> = async ({ storeId }) => {
           <Link href={`/${storeId}`} className="ml-4 flex lg:ml-0 gap-x-2">
             <p className="font-bold text-xl">{setting.name}</p>
           </Link>
+          <NavbarActions storeId={storeId} />
+        </div>
+        <div className="relative px-4 sm:px-6 lg:px-8 flex h-12 mx-6 items-center justify-center">
           <MainNav storeId={storeId} data={categories} />
-          <NavbarActions storeId={storeId}/>
         </div>
       </Container>
     </div>
